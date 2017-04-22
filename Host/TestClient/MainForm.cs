@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace TestClient
+﻿namespace TestClient
 {
+    using System;
+    using System.Windows.Forms;
+
     public partial class MainForm : Form
     {
         public MainForm()
@@ -22,7 +15,12 @@ namespace TestClient
             base.OnLoad(e);
             this.TopMost = true;
             this.FormBorderStyle = FormBorderStyle.None;
-            //this.WindowState = FormWindowState.Maximized;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Console.Beep();
+            base.OnClosed(e);
         }
     }
 }

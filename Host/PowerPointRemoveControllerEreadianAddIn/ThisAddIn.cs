@@ -118,83 +118,98 @@ namespace PowerPointRemoveControllerEreadianAddIn
             var events = new WaitHandle[2] { this.stopEvent.WaitHandle, null};
             var inputBuffer = new byte[1];
             var outputBuffer = new byte[] { 0 };
-            while (true)
+            while (!this.stopEvent.Wait(0))
             {
-                using (var channel = new Channel(this.configurations.SocketPortNumber))
+                try
                 {
-                    // wait for connection
-                    var asyncResult = channel.BeginAccept();
-                    events[1] = asyncResult.AsyncWaitHandle;
-                    if (WaitHandle.WaitAny(events) == 0)
+                    using (var channel = new Channel(this.configurations.SocketPortNumber))
                     {
-                        channel.Send(outputBuffer);
-                        break;
-                    }
-
-                    channel.EndAccept(asyncResult);
-
-                    // get device name length
-                    asyncResult = channel.BeginReceive(inputBuffer, 1);
-                    events[1] = asyncResult.AsyncWaitHandle;
-                    if (WaitHandle.WaitAny(events) == 0)
-                    {
-                        channel.Send(outputBuffer);
-                        break;
-                    }
-
-                    var size = channel.EndReceive(asyncResult);
-                    if ((size != 1) && ((int)inputBuffer[0] != deviceName.Length))
-                    {
-                        channel.Send(outputBuffer);
-                        continue;
-                    }
-
-                    // get device name
-                    asyncResult = channel.BeginReceive(nameBuffer, size);
-                    events[1] = asyncResult.AsyncWaitHandle;
-                    if (WaitHandle.WaitAny(events) == 0)
-                    {
-                        channel.Send(outputBuffer);
-                        break;
-                    }
-
-                    size = channel.EndReceive(asyncResult);
-                    if (size != deviceName.Length)
-                    {
-                        channel.Send(outputBuffer);
-                        continue;
-                    }
-
-                    for (var i = 0; i < size; i++)
-                    {
-                        if (deviceName[i] != nameBuffer[i])
+                        // wait for connection
+                        var asyncResult = channel.BeginAccept();
+                        events[1] = asyncResult.AsyncWaitHandle;
+                        if (WaitHandle.WaitAny(events) == 0)
                         {
                             channel.Send(outputBuffer);
-                            continue;
+                            break;
                         }
-                    }
 
-                    while (true)
-                    {
+                        channel.EndAccept(asyncResult);
+
+                        // get device name length
                         asyncResult = channel.BeginReceive(inputBuffer, 1);
                         events[1] = asyncResult.AsyncWaitHandle;
                         if (WaitHandle.WaitAny(events) == 0)
                         {
+                            channel.Send(outputBuffer);
+                            break;
+                        }
+
+                        var size = channel.EndReceive(asyncResult);
+                        if ((size != 1) && ((int)inputBuffer[0] != deviceName.Length))
+                        {
+                            channel.Send(outputBuffer);
+                            continue;
+                        }
+
+                        // get device name
+                        asyncResult = channel.BeginReceive(nameBuffer, size);
+                        events[1] = asyncResult.AsyncWaitHandle;
+                        if (WaitHandle.WaitAny(events) == 0)
+                        {
+                            channel.Send(outputBuffer);
                             break;
                         }
 
                         size = channel.EndReceive(asyncResult);
-                        if (inputBuffer[0] == 0)
+                        if (size != deviceName.Length)
                         {
-                            this.showWindow.View.Previous();
+                            channel.Send(outputBuffer);
+                            continue;
                         }
-                        else
-                        {
-                            this.showWindow.View.Next();
-                        }
-                    }
 
-                    channel.Send(outputBuffer);
+                        bool deviceMatch = true;
+                        for (var i = 0; i < size; i++)
+                        {
+                            if (deviceName[i] != nameBuffer[i])
+                            {
+                                deviceMatch = false;
+                                break;
+                            }
+                        }
+
+                        if (!deviceMatch)
+                        {
+                            channel.Send(outputBuffer);
+                            break;
+                        }
+
+                        while (true)
+                        {
+                            asyncResult = channel.BeginReceive(inputBuffer, 1);
+                            events[1] = asyncResult.AsyncWaitHandle;
+                            if (WaitHandle.WaitAny(events) == 0)
+                            {
+                                break;
+                            }
+
+                            size = channel.EndReceive(asyncResult);
+                            if (inputBuffer[0] == 0)
+                            {
+                                this.showWindow.View.Previous();
+                            }
+                            else
+                            {
+                                this.showWindow.View.Next();
+                            }
+                        }
+
+                        channel.Send(outputBuffer);
+                    }
+                }
+                catch
+                {
+                    // TODO: log error
+                    Thread.Sleep(500);
                 }
             }
         }

@@ -7,15 +7,12 @@
 namespace PowerPointRemoveControllerEreadianAddIn
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading;
     using System.Net;
     using System.Net.Sockets;
-    using System.Globalization;
-    using System.Diagnostics;
 
+    /// <summary>
+    /// Communication Channel
+    /// </summary>
     public class Channel : IDisposable
     {
         private Socket hostSocket;
@@ -23,6 +20,8 @@ namespace PowerPointRemoveControllerEreadianAddIn
 
         public Channel(int port)
         {
+            this.clientSocket = null;
+
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
             this.hostSocket = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             this.hostSocket.Bind(endpoint);
