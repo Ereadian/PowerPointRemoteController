@@ -43,12 +43,20 @@
 
 		protected void OnNextPage (object sender, EventArgs e)
 		{
-            this.ShowMessage("Next");
+            var command = new byte[]{ Commands.NextClick };
+            if (!this.Channel.Send(command))
+            {
+                this.EnableControlButtons(false);
+            }
 		}
 
 		protected void OnPreviousPage (object sender, EventArgs e)
 		{
-            this.ShowMessage("Previous");
+            var command = new byte[]{ Commands.PreviousClick };
+            if (!this.Channel.Send(command))
+            {
+                this.EnableControlButtons(false);
+            }
 		}
 
 		private static void RunMonitorThread(object state)
@@ -71,7 +79,17 @@
             while (!this.StopEvent.Wait(waitTime))
             {
                 watch.Start();
-                //check network and action
+                int dataSize;
+                if (!this.Channel.GetAvailable(out dataSize))
+                {
+                    this.EnableControlButtons(false);
+                }
+                string content;
+                if (!this.GetContent(out content))
+                {
+                    this.EnableControlButtons(false);
+                }
+
                 watch.Stop();
                 waitTime = Math.Max(0, this.Heartbet - (int)watch.ElapsedMilliseconds);
                 watch.Reset();
@@ -115,6 +133,12 @@
             }
         }
 
+        private bool GetContent(out string content)
+        {
+            content = null;
+            return true;
+        }
+
         private void ShowMessage(string message)
         {
             if (!string.IsNullOrEmpty(message))
@@ -124,6 +148,12 @@
                     this.MessageLine.Text = message;
                 }
             }
+        }
+
+        private void EnableControlButtons(bool show)
+        {
+            this.PrevPageButton.Sensitive = show;
+            this.NextPageButton.Sensitive = show;
         }
 
         private static int GetInteger(string configurationKey, int defaultValue)

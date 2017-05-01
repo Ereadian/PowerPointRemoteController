@@ -58,6 +58,27 @@
             return false;
         }
 
+        public bool GetAvailable(out int dataSize )
+        {
+            dataSize = 0;
+            var socket = this.ClientSocket;
+            if (socket != null)
+            {
+                try
+                {
+                    dataSize = socket.Available;
+                    return true;
+                }
+                catch(Exception exception)
+                {
+                    this.ShowMessage(exception.Message);
+                    this.Close();
+                }
+            }
+
+            return false;
+        }
+
         public bool Receive(byte[] data)
         {
             var socket = this.ClientSocket;
@@ -122,7 +143,7 @@
                 var content = Encoding.ASCII.GetBytes(this.Name);
                 var header = new byte[]{ (byte)content.Length};
                 socket.Send(header);
-                socket.Send(header);
+                socket.Send(content);
             }
             catch (Exception exception)
             {
