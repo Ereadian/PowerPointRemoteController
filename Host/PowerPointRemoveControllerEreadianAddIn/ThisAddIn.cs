@@ -152,7 +152,7 @@ namespace PowerPointRemoveControllerEreadianAddIn
                         }
 
                         // get device name
-                        asyncResult = channel.BeginReceive(nameBuffer, size);
+                        asyncResult = channel.BeginReceive(nameBuffer, nameBuffer.Length);
                         events[1] = asyncResult.AsyncWaitHandle;
                         if (WaitHandle.WaitAny(events) == 0)
                         {
