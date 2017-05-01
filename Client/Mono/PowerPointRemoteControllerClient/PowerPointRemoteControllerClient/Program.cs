@@ -1,7 +1,7 @@
 ﻿using System;
 using Gtk;
 
-namespace PowerPointRemoteControllerClient
+namespace Ereadian.PowerPointRemoteController.Client
 {
 	class MainClass
 	{

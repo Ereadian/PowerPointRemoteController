@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{72867EE6-4470-4B3D-9B69-9F2954F4805C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>PowerPointRemoteControllerClient</RootNamespace>
+    <RootNamespace>Ereadian.PowerPointRemoteController.Client</RootNamespace>
     <AssemblyName>PowerPointRemoteControllerClient</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -56,6 +56,9 @@
       <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="Mono.Posix" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -65,9 +68,13 @@
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />
     <Compile Include="MainWindow.cs" />
-    <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="gtk-gui\Ereadian.PowerPointRemoteController.Client.MainWindow.cs" />
+    <Compile Include="Channel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
 </Project>

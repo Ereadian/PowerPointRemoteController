@@ -8,7 +8,7 @@
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <widget-library name="../bin/Debug/PowerPointRemoteControllerClient.exe" internal="true" />
   </import>
-  <widget class="Gtk.Window" id="MainWindow" design-size="536 334">
+  <widget class="Gtk.Window" id="Ereadian.PowerPointRemoteController.Client.MainWindow" design-size="536 334">
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -18,12 +18,35 @@
         <property name="MemberName" />
         <property name="Spacing">6</property>
         <child>
-          <widget class="Gtk.TextView" id="ContentView">
+          <widget class="Gtk.VBox" id="ContentArea">
             <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Editable">False</property>
-            <property name="CursorVisible">False</property>
-            <property name="Text" translatable="yes" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.TextView" id="ContentBox">
+                <property name="MemberName" />
+                <property name="Sensitive">False</property>
+                <property name="Text" translatable="yes" />
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Entry" id="MessageLine">
+                <property name="MemberName" />
+                <property name="Sensitive">False</property>
+                <property name="CanFocus">True</property>
+                <property name="IsEditable">True</property>
+                <property name="InvisibleChar">•</property>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">0</property>
@@ -35,7 +58,7 @@
             <property name="MemberName" />
             <property name="Spacing">6</property>
             <child>
-              <widget class="Gtk.Button" id="NextPage">
+              <widget class="Gtk.Button" id="NextPageButton">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Type">TextOnly</property>
@@ -51,7 +74,7 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Button" id="PrevPage">
+              <widget class="Gtk.Button" id="PrevPageButton">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Type">TextOnly</property>
