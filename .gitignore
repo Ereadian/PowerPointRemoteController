@@ -3,6 +3,7 @@
 ################################################################################
 
 *.suo
+*.userprefs
 bin
 obj
 /Host/PowerPointRemoveControllerEreadianAddIn/PowerPointRemoveControllerEreadianAddIn.csproj.user
