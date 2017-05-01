@@ -26,6 +26,7 @@
             this.Channel = new Channel(
                 ConfigurationManager.AppSettings["RemoteAddress"],
                 GetInteger("RemotePort", DefaultRemotePort),
+                ConfigurationManager.AppSettings["ClientName"],
                 message => this.ShowMessage(message));
             this.Heartbet = GetInteger("Heartbet", DefaultHeartbet);
             this.StopEvent = new ManualResetEventSlim (false);
