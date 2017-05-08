@@ -152,6 +152,7 @@
   -->
   <ItemGroup>
     <Compile Include="Channel.cs" />
+    <Compile Include="CommandIds.cs" />
     <Compile Include="Configurations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

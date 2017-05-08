@@ -179,6 +179,7 @@ namespace PowerPointRemoveControllerEreadianAddIn
 
                         if (!deviceMatch)
                         {
+                            outputBuffer[0] = CommandIds.Disconnect;
                             channel.Send(outputBuffer);
                             break;
                         }
@@ -193,13 +194,18 @@ namespace PowerPointRemoveControllerEreadianAddIn
                             }
 
                             size = channel.EndReceive(asyncResult);
-                            if (inputBuffer[0] == 0)
+                            switch (inputBuffer[0])
                             {
-                                this.showWindow.View.Previous();
-                            }
-                            else
-                            {
-                                this.showWindow.View.Next();
+                                case CommandIds.PrevStep:
+                                    this.showWindow.View.Previous();
+                                    break;
+                                case CommandIds.NextStep:
+                                    this.showWindow.View.Next();
+                                    break;
+                                case CommandIds.SyncRequest:
+                                    outputBuffer[0] = CommandIds.SyncResponse;
+                                    channel.Send(outputBuffer);
+                                    break;
                             }
                         }
 
